@@ -7,3 +7,7 @@ To run the example run:
 ```
 cargo run --example cube
 ```
+
+## License
+
+Apache 2 / MIT license like rustc is.
