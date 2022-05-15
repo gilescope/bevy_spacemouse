@@ -10,4 +10,4 @@ spacenav-plus = "0.1.0"
 bevy = {version = "0.7", default-features = false}
 
 [dev-dependencies]
-bevy = "*"
+bevy = {version = "0.7", default-features = false, features = ["render","x11"]}
