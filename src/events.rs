@@ -5,8 +5,7 @@ pub struct SpaceMouse;
 
 impl Plugin for SpaceMouse {
     fn build(&self, app: &mut App) {
-        app
-            .add_event::<SpaceEvent>()
+        app.add_event::<SpaceEvent>()
             .add_system(space_mouse)
             .add_startup_system(setup);
     }
