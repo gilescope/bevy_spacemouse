@@ -9,7 +9,9 @@ so that you control the cube:
 cargo run --example cube
 ```
 
-alternatively here the component is attached to the camera so that you control the view:
+alternatively here the relative component is attached to the camera 
+(`.insert(SpaceMouseRelativeControllable);`)
+so that you control the view:
 
 ```sh
 cargo run --example cube-camera-controlled
