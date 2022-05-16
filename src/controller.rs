@@ -16,9 +16,9 @@ struct LockState {
 }
 
 // Alter these settings to reduce or increase the effect of the mouse.
-struct Scale {
-    rotate_scale: f32,
-    translate_scale: f32,
+pub struct Scale {
+    pub rotate_scale: f32,
+    pub translate_scale: f32,
 }
 
 impl Default for Scale {
