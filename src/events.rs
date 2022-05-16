@@ -20,7 +20,7 @@ fn setup() {
 }
 
 fn space_mouse(mut ev_motion: EventWriter<SpaceEvent>) {
-    if let Some(event) = spacenav_plus::lib::spnav_poll_event() {
+    while let Some(event) = spacenav_plus::lib::spnav_poll_event() {
         ev_motion.send(event);
     }
 }
