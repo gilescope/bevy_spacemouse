@@ -26,6 +26,7 @@ brew install libspnav
 ```
 
 and also that your running the `spacenavd` daemon. (This is the open source driver for it.)
+I think this driver only works on linux sorry!
 
 ```toml
 [dependencies]
@@ -43,6 +44,12 @@ The SpaceMouse will trigger events when the mouse is moved.
 ```rust
     .add_plugin(SpaceMousePlugin)
 ```
+
+## Configuration:
+
+There's a resource called Scale that you can override the values there so that they
+make sense in the scale of the world that you are living in. Feel free to set both values
+to the same number.
 
 ## License
 
