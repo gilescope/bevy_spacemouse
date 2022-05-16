@@ -15,9 +15,25 @@ struct LockState {
     translate_locked: bool,
 }
 
+// Alter these settings to reduce or increase the effect of the mouse.
+struct Scale {
+    rotate_scale: f32,
+    translate_scale: f32,
+}
+
+impl Default for Scale {
+    fn default() -> Self {
+        Self {
+            rotate_scale: 0.0001,
+            translate_scale: 0.0001,
+        }
+    }
+}
+
 impl Plugin for SpaceController {
     fn build(&self, app: &mut App) {
         app.init_resource::<LockState>()
+            .init_resource::<Scale>()
             .add_event::<SpaceEvent>()
             .add_system(space_controller)
             .add_system(space_controller_relative);
@@ -31,6 +47,7 @@ pub struct SpaceMouseControllable;
 fn space_controller(
     mut ev_levelup: EventReader<SpaceEvent>,
     mut query: Query<&mut Transform, With<SpaceMouseControllable>>,
+    scale: Res<Scale>,
     mut locks: ResMut<LockState>,
 ) {
     for ev in ev_levelup.iter() {
@@ -44,17 +61,16 @@ fn space_controller(
                 rz,
                 ..
             }) => {
-                let scale = 0.0001;
                 for mut controllable in query.iter_mut() {
-                    controllable.translation.x += *x as f32 * scale;
-                    controllable.translation.y += *y as f32 * scale;
-                    controllable.translation.z += *z as f32 * scale * -1.;
+                    controllable.translation.x += *x as f32 * scale.translate_scale;
+                    controllable.translation.y += *y as f32 * scale.translate_scale;
+                    controllable.translation.z += *z as f32 * scale.translate_scale * -1.;
 
                     let rot = Quat::from_euler(
                         EulerRot::XYZ,
-                        *rx as f32 * scale,
-                        *ry as f32 * scale,
-                        *rz as f32 * scale * -1.,
+                        *rx as f32 * scale.rotate_scale,
+                        *ry as f32 * scale.rotate_scale,
+                        *rz as f32 * scale.rotate_scale * -1.,
                     );
                     controllable.rotation *= rot;
                 }
@@ -82,6 +98,7 @@ pub struct SpaceMouseRelativeControllable;
 fn space_controller_relative(
     mut ev_levelup: EventReader<SpaceEvent>,
     mut query: Query<&mut Transform, With<SpaceMouseRelativeControllable>>,
+    scale: Res<Scale>,
     mut locks: ResMut<LockState>,
 ) {
     for ev in ev_levelup.iter() {
@@ -95,12 +112,15 @@ fn space_controller_relative(
                 rz,
                 ..
             }) => {
-                let scale = 0.0001;
                 for mut controllable in query.iter_mut() {
                     // We can't simply add the x, y and z as that translation should be relative
                     // to where we are looking.
 
-                    let (x, y, z) = (*x as f32 * scale, *y as f32 * scale, *z as f32 * scale);
+                    let (x, y, z) = (
+                        *x as f32 * scale.translate_scale,
+                        *y as f32 * scale.translate_scale,
+                        *z as f32 * scale.translate_scale,
+                    );
 
                     let forward = controllable.forward();
                     let right = controllable.right();
@@ -113,9 +133,9 @@ fn space_controller_relative(
                     if !locks.rotate_locked {
                         let rot = Quat::from_euler(
                             EulerRot::XYZ,
-                            *rx as f32 * scale,
-                            *ry as f32 * scale,
-                            *rz as f32 * scale * -1.,
+                            *rx as f32 * scale.rotate_scale,
+                            *ry as f32 * scale.rotate_scale,
+                            *rz as f32 * scale.rotate_scale * -1.,
                         );
                         controllable.rotation *= rot;
                     }
