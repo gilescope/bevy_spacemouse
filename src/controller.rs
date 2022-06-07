@@ -1,5 +1,6 @@
 use bevy::ecs as bevy_ecs;
 use bevy::prelude::*;
+use bevy::window::RequestRedraw;
 use bevy_ecs::prelude::Component;
 use spacenav_plus::Event as SpaceEvent;
 use spacenav_plus::Event;
@@ -49,8 +50,11 @@ fn space_controller(
     mut query: Query<&mut Transform, With<SpaceMouseControllable>>,
     scale: Res<Scale>,
     mut locks: ResMut<LockState>,
+    mut event: EventWriter<RequestRedraw>,
 ) {
+    let mut changed = false;
     for ev in ev_levelup.iter() {
+        changed = true;
         match ev {
             Event::Motion(MotionEvent {
                 x,
@@ -89,6 +93,9 @@ fn space_controller(
             }
         }
     }
+    if changed {
+        event.send(RequestRedraw);
+    }
 }
 
 /// Entities that should be controlled by the space mouse can be marked up with this component.
@@ -100,7 +107,9 @@ fn space_controller_relative(
     mut query: Query<&mut Transform, With<SpaceMouseRelativeControllable>>,
     scale: Res<Scale>,
     mut locks: ResMut<LockState>,
+    mut event: EventWriter<RequestRedraw>,
 ) {
+    let changed = false;
     for ev in ev_levelup.iter() {
         match ev {
             Event::Motion(MotionEvent {
@@ -154,5 +163,8 @@ fn space_controller_relative(
                 }
             }
         }
+    }
+    if changed {
+        event.send(RequestRedraw);
     }
 }

@@ -7,9 +7,7 @@ pub mod events;
 
 pub struct SpaceMousePlugin;
 
-pub use controller::SpaceMouseControllable;
-pub use controller::SpaceMouseRelativeControllable;
-pub use controller::Scale;
+pub use controller::{Scale, SpaceMouseControllable, SpaceMouseRelativeControllable};
 
 impl Plugin for SpaceMousePlugin {
     fn build(&self, app: &mut App) {
