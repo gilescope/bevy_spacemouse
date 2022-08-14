@@ -1,5 +1,5 @@
 # bevy_spacemouse
-Bevy spacemouse integration
+Bevy spacemouse integration (currently only works for linux - PRs welcome.)
 
 Bevy game engine showing how to control things using a 3d space mouse.
 
